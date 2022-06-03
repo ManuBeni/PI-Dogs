@@ -21,8 +21,8 @@ const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 
 // Syncing all the models at once. 
-// CAMBIAR FORCE A TRUE PARA QUE NO BORRE LOS DATOS CUANDO SE SUBEN A LA DB
-conn.sync({ force: true }).then(() => {
+// CAMBIAR FORCE A FALSE PARA QUE NO BORRE LOS DATOS CUANDO SE SUBEN A LA DB
+conn.sync({ force: false }).then(() => {
   server.listen(3001, () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
   });
