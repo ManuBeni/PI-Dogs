@@ -19,6 +19,4 @@ router.use('/dogs', dogsRoute) // /api/characters
 router.use('/dog', dogRoute) // /api/dog
 router.use('/temperament', tempersRoute) // /api/temperament
 
-
-
-module.exports = router;
+module.exports = {router};
