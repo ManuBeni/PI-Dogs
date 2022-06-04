@@ -46,12 +46,12 @@ router.post('/', async (req, res, next) => {
 
 })
 
-router.put('/', (req, res, next) => {
-    res.send('soy put /dog')
-})
+// router.put('/', (req, res, next) => {
+//     res.send('soy put /dog')
+// })
 
-router.delete('/', (req, res, next) => {
-    res.send('soy delete /dog')
-})
+// router.delete('/', (req, res, next) => {
+//     res.send('soy delete /dog')
+// })
 
 module.exports = router;

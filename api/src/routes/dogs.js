@@ -2,10 +2,9 @@ const {Router} = require('express')
 const { Dog, Temper } = require('../db')
 const router = Router()
 const axios = require('axios')
+// API KEY
 require('dotenv').config();
-const {
-    API_KEY
-  } = process.env;
+const { API_KEY } = process.env;
 
 
 const getApiData = async () => {
@@ -68,10 +67,11 @@ router.get('/', async (req, res, next) => {
 
     try {
 
+        // Gets the 'name' query, if there is one
         const queryName = req.query.name
         const allData = await getAllData()
     
-        // If a query name exists in the url, we get all occurrences (in api or DB).
+        // If a 'name' query exists in the url, we get all occurrences (in api or DB).
         if(queryName){
 
             let dogName = await allData
@@ -84,7 +84,7 @@ router.get('/', async (req, res, next) => {
             
         } else {
 
-        // else, we send all data on api and DB dogs.
+        // Else, we send all data on api and DB dogs.
         res.status(200).send(allData)
 
         }
@@ -93,18 +93,39 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.get('/:id', async (req, res, next)=>{
+    // Gets the id parameter from the url
+    const id = req.params.id
 
-    res.send('soy post /dogs')
+    // Gets all dogs
+    const allDogs = await getAllData()
+
+    // If it gets an id, it filters all the dogs and resolve with the found dog.
+    // If there is no dog with that ID, It throws a 404 error. 
+    if(id){
+
+        let dogID = await allDogs.filter(el => el.id == id)
+
+        dogID.length ?
+        res.status(200).send(dogID) :
+        res.status(404).send('No existe un perro con ese ID :(')
+
+    }
 
 })
 
-router.put('/', (req, res, next) => {
-    res.send('soy put /dogs')
-})
+// router.post('/', async (req, res, next) => {
 
-router.delete('/', (req, res, next) => {
-    res.send('soy delete /dogs')
-})
+//     res.send('soy post /dogs')
+
+// })
+
+// router.put('/', (req, res, next) => {
+//     res.send('soy put /dogs')
+// })
+
+// router.delete('/', (req, res, next) => {
+//     res.send('soy delete /dogs')
+// })
 
 module.exports = router;
