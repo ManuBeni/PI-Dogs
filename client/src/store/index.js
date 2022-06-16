@@ -5,7 +5,8 @@ import RootReducer from "../reducer";
 const store = configureStore({
     reducer: {
         RootReducer
-    }
+    },
+    middleware: [thunk]
 })
 
 export default store

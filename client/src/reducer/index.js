@@ -1,6 +1,17 @@
-function RootReducer(state={},action){
+import {GET_DOGS} from '../actions/index.js'
+
+const initialState = {
+    dogs : []
+}
+
+const RootReducer = (state=initialState,action) => {
     switch(action.type){
-        default: return state
+        case "GET_DOGS":
+            return {
+                ...state,
+                dogs:action.payload
+            }
+        default: return {...state}
     }
 }
 
