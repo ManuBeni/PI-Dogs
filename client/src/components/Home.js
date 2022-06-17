@@ -7,11 +7,14 @@ import Card from './Card'
 
 export default function Home(){
     const dispatch = useDispatch();
-    const allDogs = useSelector((state) => state.dogs)
+    
 
     useEffect(()=>{
         dispatch(getDogs())
     },[dispatch])
+
+    const dogs = useSelector((state) => state.RootReducer.dogs)
+    
 
     function handleClick(e){
         e.preventDefault()
@@ -20,7 +23,7 @@ export default function Home(){
 
     return (
         <div>
-
+            
             <Link to = '/dog'>Crear perro</Link>
 
             <h1>Aguanten los perritos!</h1>
@@ -45,19 +48,25 @@ export default function Home(){
                     <option value='api'>Existente</option>
                     <option value='created'>Creado</option>
                 </select>
-                {console.log(allDogs)}
+                </div>
+               <ul>
                 {
-                    allDogs?.map(el=>{
+                    dogs?.map(function(el){
                         return(
-                        <fragment>
-                            <Link to= {"/home/" + el.id}>
-                                <Card name={el.name} image={el.image} temperament={el.temperament} weight={el.weight} key={el.id}/>
+                    
+                        <li key={el.id}>
+                            <Link to={'/home/' + el.id}>
+                            <Card name={el.name} image={el.image} temperament={el.temperament} weight={el.weight} key={el.id}/>
                             </Link>
-                        </fragment>
+                        </li>
+                   
                         )
                     })
                 }
-            </div>
-        </div>
+                </ul>
+                
+              
+            
+         </div>
     )
 }

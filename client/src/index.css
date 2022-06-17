@@ -16,3 +16,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ul{
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li{
+  background-color: lightgrey;
+  width: 200px;
+  
+  padding: 2px 5px;
+  border: 1px solid black;
+} */
