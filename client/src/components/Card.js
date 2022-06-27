@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Card({name, image, temperament, weight}){
     return(
-        <div>
+        <div className='card'>
             <img src={image} alt="not found" width='200px' height='200px'></img>
             <h3>{name}</h3>
             <h5>Weight: {weight}</h5>

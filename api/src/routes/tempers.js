@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const router = Router()
-const {Temper} = require('../db')
+const {Temperament} = require('../db')
 const axios = require('axios')
 require('dotenv').config();
 const {
@@ -29,14 +29,14 @@ router.get('/', async (req, res, next) => {
     // Adding each one to de DB, only if they don't exist already
     diffTempers.forEach(e=>{
         if(e){
-            Temper.findOrCreate({
+            Temperament.findOrCreate({
                 where: {name:e}
             })
         }
     })
 
     //Getting all the added temperaments
-    const allTempers = await Temper.findAll()
+    const allTempers = await Temperament.findAll()
     res.send(allTempers)
 })
 
@@ -47,7 +47,7 @@ router.post('/', async (req, res, next) => {
         let {name} = req.body
 
         // Creating new temper.
-        const newTemper = await Temper
+        const newTemper = await Temperament
         .create({ name })
 
         // Resolve and send the newly created temper.

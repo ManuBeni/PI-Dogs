@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const router = Router()
-const {Dog, Temper} = require('../db')
+const {Dog, Temperament} = require('../db')
 
 router.get('/', (req, res, next) => {
     res.send('soy get /dog')
@@ -15,7 +15,7 @@ router.post('/', async (req, res, next) => {
             height, 
             weight, 
             life_span,
-            tempers
+            temperaments
         } = req.body
 
         // Create a new dog from that info.
@@ -24,16 +24,16 @@ router.post('/', async (req, res, next) => {
             height,
             weight,
             life_span,
-            tempers
+            temperaments
         })
 
         // Find tempers on DB
-        const tempersDB = await Temper.findAll({
-            where: { name : tempers }
+        const tempersDB = await Temperament.findAll({
+            where: { name : temperaments }
         })
 
         // Add DB tempers to created dog.
-        newDog.addTempers(tempersDB)
+        newDog.addTemperaments(tempersDB)
         
         //resolve and send created dog.
         res.status(201).send(newDog)

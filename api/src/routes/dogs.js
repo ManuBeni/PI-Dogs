@@ -1,5 +1,5 @@
 const {Router} = require('express')
-const { Dog, Temper } = require('../db')
+const { Dog, Temperament } = require('../db')
 const router = Router()
 const axios = require('axios')
 // API KEY
@@ -43,7 +43,7 @@ const getDBData = async () => {
     return await Dog.findAll({
        
         include:{
-            model: Temper,
+            model: Temperament,
             attributes: ['name'],
             through: {
                 attributes:[]
