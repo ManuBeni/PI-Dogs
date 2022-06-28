@@ -23,8 +23,7 @@ router.post('/', async (req, res, next) => {
             name,
             height,
             weight,
-            life_span,
-            temperaments
+            life_span
         })
 
         // Find tempers on DB
@@ -50,8 +49,14 @@ router.post('/', async (req, res, next) => {
 //     res.send('soy put /dog')
 // })
 
-// router.delete('/', (req, res, next) => {
-//     res.send('soy delete /dog')
-// })
+ router.delete('/', async (req, res, next) => {
+     let nameToDelete = req.body.name
+
+     await Dog.destroy({
+        where: { name: nameToDelete }
+     })
+
+     res.send(nameToDelete + " deleted from db")
+ })
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDogs,getTempers,filterDogsByTemper } from '../actions';
+import { getDogs,getTempers,filterDogsByTemper,filterDogsByOrigin,ascOrDesc,order } from '../actions';
 import {Link} from 'react-router-dom';
 import Card from './Card'
 import Pagination from './Pagination';
@@ -15,6 +15,8 @@ export default function Home(){
     const indexOFLastDog = currentPage * dogsPerPage
     const indexOfFristDog = indexOFLastDog - dogsPerPage
     const currentDogs =  dogs.slice(indexOfFristDog, indexOFLastDog)
+    let temper = "all";
+    let origin = "all";
 
     const paginated = (pageNumber) => {
         setCurrentPage(pageNumber)
@@ -29,13 +31,35 @@ export default function Home(){
     },[dispatch])
 
     function handleFilterByTemper(e){
-        console.log(e.target.value)
-        dispatch(filterDogsByTemper(e.target.value))
+        temper = e.target.value
+        console.log(temper)
+        //dispatch(filterDogsByTemper(e.target.value))
     }
 
+    function handleFilterByOrigin(e){
+        origin = e.target.value
+        console.log(origin)
+    }
+
+    // function handleOrderWay(e){
+    //     dispatch(ascOrDesc(e.target.value))
+    // }
+
+    // function handleOrder(e){
+    //     dispatch(order(e.target.value))
+    // }
+    
     function handleClick(e){
         e.preventDefault()
         dispatch(getDogs())
+        paginated(1)
+    }
+
+    function handleFilterClick(e){
+        e.preventDefault()
+        if(temper !== "all")dispatch(filterDogsByTemper(temper))
+        if(origin !== "all")dispatch(filterDogsByOrigin(origin))
+        
         paginated(1)
     }
 
@@ -44,9 +68,19 @@ export default function Home(){
     return (
         <div>
             
-            <Link to = '/dog'>Crear perro</Link>
+            <div className='homeHeader'>
+                <Link to = '/'>
+                    <img src='https://www.clipartmax.com/png/full/3-39170_paw-print-dog-paw-vector-graphic-dog-paw-print-vector.png' alt='no img'/>
+                </Link>
+                <h1>Dog Search</h1>
+                <div className='space'/>
 
-            <h1>Aguanten los perritos!</h1>
+                <button className='createDog'>
+                <Link to = '/dog'>Crear perro</Link>
+                </button>
+
+            </div>
+            
 
             <button onClick={e=>{handleClick(e)}}>
                 Volver a cargar todos los perros
@@ -55,7 +89,7 @@ export default function Home(){
             <div>
 
                 <select onChange={e=>handleFilterByTemper(e)}>
-                    <option value="All">Todos</option>
+                    <option value="all">Todos</option>
                     {tempers?.map((temper)=>{
                         return (
                             <option value = {temper.name} key={temper.id}>{temper.name}</option>
@@ -64,20 +98,22 @@ export default function Home(){
                 </select>
 
                 <select>
-                    <option value = 'peso'>Peso</option>
                     <option value = 'alf'>Orden Alfabético</option>
+                    <option value = 'peso'>Peso</option>
                 </select>
 
                 <select>
-                    <option value='asc'>Ascendente</option>
+                    <option value='asc'>Ascendiente</option>
                     <option value='desc'>Descendiente</option>
                 </select>
 
-                <select>
+                <select onChange={e=>handleFilterByOrigin(e)}>
                     <option value='all'>Todos</option>
                     <option value='api'>Existente</option>
                     <option value='created'>Creado</option>
                 </select>
+
+                <button  onClick={e=>{handleFilterClick(e)}}>Ordenar/Filtrar</button>
 
             </div>
 
@@ -95,7 +131,10 @@ export default function Home(){
                     
                         <li  key={el.id}>
                             <Link style={{textDecoration: 'none'}} to={'/home/' + el.id}>
-                            <Card name={el.name} image={el.image} temperament={el.temperament} weight={el.weight} key={el.id}/>
+                            <Card 
+                                name={el.name} 
+                                image={el.image} 
+                                temperament={el.temperament ? el.temperament : el.temperaments?.map(el=>el.name).join(", ")} weight={el.weight} key={el.id}/>
                             </Link>
                         </li>
                    

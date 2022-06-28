@@ -73,10 +73,15 @@ router.get('/', async (req, res, next) => {
     
         // If a 'name' query exists in the url, we get all occurrences (in api or DB).
         if(queryName){
-
-            let dogName = await allData
-            .filter(el=>el.name.toLowerCase()
-            .includes(queryName.toLowerCase()))
+            let dogas = allData.filter(el=>el.name == queryName)
+            console.log(dogas)
+            let dogName = allData.filter(el=>{
+                let name = el.name.toLowerCase()
+                let querys = queryName.toLowerCase()
+                return name === querys
+            })
+            console.log("..............")
+            console.log(dogName)
     
             dogName.length ?
             res.status(200).send(dogName) : 
