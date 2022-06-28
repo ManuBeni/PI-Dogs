@@ -2,19 +2,19 @@ import {GET_DOGS, GET_TEMPERS, FILTER_BY_TEMPER, FILTER_BY_ORIGIN,ORDER,ASC_OR_D
 
 const initialState = {
     dogs : [],
+    allDogs:[],
     tempers:[],
     ascOrDesc:"asc"
 }
 
 const RootReducer = (state=initialState,action) => {
 
-    const allDogs = state.dogs;
-
     switch(action.type){
         case GET_DOGS:
             return {
                 ...state,
-                dogs:action.payload
+                dogs:action.payload,
+                allDogs:action.payload
             }
         case GET_TEMPERS:
             return {
@@ -24,8 +24,8 @@ const RootReducer = (state=initialState,action) => {
 
         case FILTER_BY_TEMPER: 
             const temperFiltered = action.payload === "All" ? 
-            allDogs : 
-            allDogs.filter(dog=>{
+            state.allDogs : 
+            state.allDogs.filter(dog=>{
                 let tempers = []
                 dog.temperaments === 'object' ? tempers = dog.temperaments?.forEach(e=>e.name?.split(', ')) : 
                 tempers = dog.temperament?.split(', ')
@@ -35,6 +35,7 @@ const RootReducer = (state=initialState,action) => {
                         return tempers[i] === action.payload
                     };
                 } 
+                return false
             })
             return{
                 ...state,
@@ -42,12 +43,12 @@ const RootReducer = (state=initialState,action) => {
             }
         
         case FILTER_BY_ORIGIN: 
-            let dogsByOrigin = allDogs
+            let dogsByOrigin = state.allDogs
             switch(action.payload){
-                case "all": dogsByOrigin = allDogs;break
-                case "api": dogsByOrigin = allDogs.filter(e=>e.id < 300);break
-                case "created": dogsByOrigin = allDogs.filter(e=>e.id.length > 3);break
-                default: dogsByOrigin = allDogs
+                case "all": dogsByOrigin = state.allDogs;break
+                case "api": dogsByOrigin = state.allDogs.filter(e=>e.id < 300);break
+                case "created": dogsByOrigin = state.allDogs.filter(e=>e.id.length > 3);break
+                default: dogsByOrigin = state.dogs
             }           
             return{
                 ...state,
@@ -61,7 +62,7 @@ const RootReducer = (state=initialState,action) => {
             }
 
         case ORDER:
-            let orderedDogs = allDogs
+            let orderedDogs = state.allDogs
             let order = state.ascOrDesc
             switch(action.payload){
                 case "alf": 

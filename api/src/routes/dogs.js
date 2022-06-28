@@ -80,9 +80,6 @@ router.get('/', async (req, res, next) => {
                 let querys = queryName.toLowerCase()
                 return name === querys
             })
-            console.log("..............")
-            console.log(dogName)
-    
             dogName.length ?
             res.status(200).send(dogName) : 
             res.status(404).send('There is no dog with that name :(')

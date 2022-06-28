@@ -15,8 +15,6 @@ export default function Home(){
     const indexOFLastDog = currentPage * dogsPerPage
     const indexOfFristDog = indexOFLastDog - dogsPerPage
     const currentDogs =  dogs.slice(indexOfFristDog, indexOFLastDog)
-    let temper = "all";
-    let origin = "all";
 
     const paginated = (pageNumber) => {
         setCurrentPage(pageNumber)
@@ -24,42 +22,28 @@ export default function Home(){
     
     useEffect(()=>{
         dispatch(getDogs())
-    },[dispatch])
-
-    useEffect(()=>{
         dispatch(getTempers())
     },[dispatch])
 
     function handleFilterByTemper(e){
-        temper = e.target.value
-        console.log(temper)
-        //dispatch(filterDogsByTemper(e.target.value))
+        dispatch(filterDogsByTemper(e.target.value))
     }
 
     function handleFilterByOrigin(e){
-        origin = e.target.value
-        console.log(origin)
+        dispatch(filterDogsByOrigin(e.target.value))
     }
 
-    // function handleOrderWay(e){
-    //     dispatch(ascOrDesc(e.target.value))
-    // }
+    function handleOrderWay(e){
+        dispatch(ascOrDesc(e.target.value))
+    }
 
-    // function handleOrder(e){
-    //     dispatch(order(e.target.value))
-    // }
+    function handleOrder(e){
+        dispatch(order(e.target.value))
+    }
     
     function handleClick(e){
         e.preventDefault()
         dispatch(getDogs())
-        paginated(1)
-    }
-
-    function handleFilterClick(e){
-        e.preventDefault()
-        if(temper !== "all")dispatch(filterDogsByTemper(temper))
-        if(origin !== "all")dispatch(filterDogsByOrigin(origin))
-        
         paginated(1)
     }
 
@@ -89,7 +73,7 @@ export default function Home(){
             <div>
 
                 <select onChange={e=>handleFilterByTemper(e)}>
-                    <option value="all">Todos</option>
+                    <option value="All">Todos</option>
                     {tempers?.map((temper)=>{
                         return (
                             <option value = {temper.name} key={temper.id}>{temper.name}</option>
@@ -97,12 +81,12 @@ export default function Home(){
                     })}
                 </select>
 
-                <select>
+                <select onChange={e=>handleOrder(e)}>
                     <option value = 'alf'>Orden Alfabético</option>
                     <option value = 'peso'>Peso</option>
                 </select>
 
-                <select>
+                <select onChange={e=>handleOrderWay(e)}>
                     <option value='asc'>Ascendiente</option>
                     <option value='desc'>Descendiente</option>
                 </select>
@@ -113,7 +97,7 @@ export default function Home(){
                     <option value='created'>Creado</option>
                 </select>
 
-                <button  onClick={e=>{handleFilterClick(e)}}>Ordenar/Filtrar</button>
+                
 
             </div>
 
@@ -130,11 +114,12 @@ export default function Home(){
                         return(
                     
                         <li  key={el.id}>
-                            <Link style={{textDecoration: 'none'}} to={'/home/' + el.id}>
+                            <Link style={{textDecoration: 'none'}} to={'/detail/' + el.id}>
                             <Card 
                                 name={el.name} 
                                 image={el.image} 
-                                temperament={el.temperament ? el.temperament : el.temperaments?.map(el=>el.name).join(", ")} weight={el.weight} key={el.id}/>
+                                temperament={el.temperament ? el.temperament : el.temperaments?.map(el=>el.name).join(", ")} weight={el.weight} key={el.id}
+                            />
                             </Link>
                         </li>
                    
