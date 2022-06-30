@@ -73,7 +73,7 @@ router.get('/', async (req, res, next) => {
     
         // If a 'name' query exists in the url, we get all occurrences (in api or DB).
         if(queryName){
-            let dogas = allData.filter(el=>el.name == queryName)
+            let dogas = allData.filter(el=>el.name.toLowerCase() == queryName)
             console.log(dogas)
             let dogName = allData.filter(el=>{
                 let name = el.name.toLowerCase()

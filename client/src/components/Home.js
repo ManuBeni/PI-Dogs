@@ -4,6 +4,7 @@ import { getDogs,getTempers,filterDogsByTemper,filterDogsByOrigin,ascOrDesc,orde
 import {Link} from 'react-router-dom';
 import Card from './Card'
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 export default function Home(){
 
@@ -12,6 +13,8 @@ export default function Home(){
     const tempers = useSelector((state)=>state.RootReducer.tempers)
     const [currentPage, setCurrentPage] = useState(1)
     const [dogsPerPage] = useState(8)
+    const [orders, setOrder] = useState("")
+    const [typeOfOrder, setTypeOfOrder] = useState("alf")
     const indexOFLastDog = currentPage * dogsPerPage
     const indexOfFristDog = indexOFLastDog - dogsPerPage
     const currentDogs =  dogs.slice(indexOfFristDog, indexOFLastDog)
@@ -34,19 +37,34 @@ export default function Home(){
     }
 
     function handleOrderWay(e){
+        
+        e.preventDefault()
         dispatch(ascOrDesc(e.target.value))
+        setCurrentPage(1)
+        setOrder(`order: ${e.target.value}` )
+        
     }
 
     function handleOrder(e){
         dispatch(order(e.target.value))
+        setTypeOfOrder(e.target.value)
     }
     
     function handleClick(e){
-        e.preventDefault()
-        dispatch(getDogs())
-        paginated(1)
+        e.preventDefault();
+        dispatch(getDogs());
+        paginated(1);
     }
 
+    //Sorted and No Duplicates Tempers
+    const sortedTempers = tempers?.map(e=>e.name.toLowerCase()).sort()
+    const tempersSet = new Set(sortedTempers)
+    const noDuplicatesSortedTempers = []
+    for(let item of tempersSet) {
+        let newStr = item.charAt(0).toUpperCase() + item.slice(1);
+        noDuplicatesSortedTempers.push(newStr) 
+    }
+    
     
 
     return (
@@ -74,9 +92,9 @@ export default function Home(){
 
                 <select onChange={e=>handleFilterByTemper(e)}>
                     <option value="All">Todos</option>
-                    {tempers?.map((temper)=>{
+                    {noDuplicatesSortedTempers.map((temper,i)=>{
                         return (
-                            <option value = {temper.name} key={temper.id}>{temper.name}</option>
+                            <option value = {temper} key={i}>{temper}</option>
                         )
                     })}
                 </select>
@@ -95,11 +113,11 @@ export default function Home(){
                     <option value='all'>Todos</option>
                     <option value='api'>Existente</option>
                     <option value='created'>Creado</option>
-                </select>
-
-                
+                </select>   
 
             </div>
+
+            <SearchBar/>   
 
             <div className='table'>
                 <Pagination
@@ -117,7 +135,7 @@ export default function Home(){
                             <Link style={{textDecoration: 'none'}} to={'/detail/' + el.id}>
                             <Card 
                                 name={el.name} 
-                                image={el.image} 
+                                image={el.image ? el.image : "https://www.clipartmax.com/png/full/3-39170_paw-print-dog-paw-vector-graphic-dog-paw-print-vector.png"} 
                                 temperament={el.temperament ? el.temperament : el.temperaments?.map(el=>el.name).join(", ")} weight={el.weight} key={el.id}
                             />
                             </Link>

@@ -1,14 +1,40 @@
 import React from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getDetail } from '../actions'
+import { useParams, Link } from 'react-router-dom'
 
-export default function Detail({name, image, temperament, temperaments, weight, life_span, height }){
+export default function Detail(props){
+
+    const {id} = useParams()
+    const dispatch = useDispatch()
+    
+    useEffect(()=>{
+        dispatch(getDetail(id))
+    },[dispatch,id])
+
+    const dog = useSelector((state)=>state.RootReducer.detail)
+
+    console.log(dog)
     return (
+        
         <div className='detail'>
-            <img src={image} alt="not found" width='200px' height='200px'></img>
-            <h3>{name}</h3>
-            <h5>Weight: {weight}</h5>
-            <h5>Height: {height}</h5>
-            <h5>Life Span: {life_span}</h5>
-            <h5>{temperament || temperaments}</h5>
+            {dog?.length > 0 ? 
+                <div>
+                    <img src={dog[0].image} alt="not found" width='200px' height='200px'></img>
+                    <h3>{dog[0].name}</h3>
+                    <h5>Weight: {dog[0].weight}</h5>
+                    <h5>Height: {dog[0].height}</h5>
+                    <h5>Life Span: {dog[0].life_span}</h5>
+                    <h5>{dog[0].temperament }</h5>
+                </div> :
+                <div>
+                    <h1>Loading</h1>
+                </div>
+            }
+            <Link style={{textDecoration: 'none'}} to="/home"><button>Volver</button></Link>
+            
         </div>
+        
     )
 }

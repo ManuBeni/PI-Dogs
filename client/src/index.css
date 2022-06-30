@@ -80,7 +80,13 @@ code {
   
 }
 
+.creationDog{
+  background-color: #F2F2F2;
+}
 
+.creationDog ul{
+  list-style:none
+}
 
 .card{
   padding: 10px;
@@ -110,6 +116,7 @@ code {
   border-radius: 5px;
 }
 
+
 .number{
   width:20px;
   color:black;
@@ -121,7 +128,7 @@ code {
 }
 
 .number:visited{
-  background-color: gray
+  background-color: black
 }
 
 .number:hover{
@@ -130,11 +137,15 @@ code {
 }
 
 .number:active{
-  background-color: lightgray;
+  background-color: lightseagreen;
 }
 
 .table{
   text-align: center;
+}
+
+.detail{
+  background-color: #F2F2F2;
 }
 /*
 .pages{

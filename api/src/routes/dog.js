@@ -15,7 +15,7 @@ router.post('/', async (req, res, next) => {
             height, 
             weight, 
             life_span,
-            temperaments
+            temperament
         } = req.body
 
         // Create a new dog from that info.
@@ -26,14 +26,17 @@ router.post('/', async (req, res, next) => {
             life_span
         })
 
-        // Find tempers on DB
-        const tempersDB = await Temperament.findAll({
-            where: { name : temperaments }
-        })
+        for(let temp in temperament){
 
-        // Add DB tempers to created dog.
-        newDog.addTemperaments(tempersDB)
-        
+            // Find tempers on DB
+            const tempersDB = await Temperament.findAll({
+                where: { name : temp }
+            })
+
+            // Add DB tempers to created dog.
+            newDog.addTemperament(tempersDB)
+
+        }
         //resolve and send created dog.
         res.status(201).send(newDog)
 

@@ -1,33 +1,59 @@
-import {GET_DOGS, GET_TEMPERS, FILTER_BY_TEMPER, FILTER_BY_ORIGIN,ORDER,ASC_OR_DESC} from '../actions/index.js'
+import {GET_DOGS, GET_TEMPERS, FILTER_BY_TEMPER, FILTER_BY_ORIGIN,ORDER,ASC_OR_DESC, GET_NAME_DOGS, POST_DOG, GET_DETAIL} from '../actions/index.js'
 
 const initialState = {
     dogs : [],
     allDogs:[],
     tempers:[],
+    detail:[],
     ascOrDesc:"asc"
 }
 
 const RootReducer = (state=initialState,action) => {
 
     switch(action.type){
+
         case GET_DOGS:
+
             return {
+
                 ...state,
                 dogs:action.payload,
                 allDogs:action.payload
-            }
-        case GET_TEMPERS:
-            return {
-                ...state,
-                tempers:action.payload
+
             }
 
+        case GET_TEMPERS:
+
+            return {
+
+                ...state,
+                tempers:action.payload
+
+            }
+
+        case GET_NAME_DOGS:
+
+            return{
+                ...state,
+                dogs: action.payload
+            }
+
+        case POST_DOG:
+            console.log("asd") 
+            return{...state}
+
         case FILTER_BY_TEMPER: 
+
+            const allTheDogs = state.allDogs
+
             const temperFiltered = action.payload === "All" ? 
-            state.allDogs : 
-            state.allDogs.filter(dog=>{
+            allTheDogs : 
+            allTheDogs.filter(dog=>{
+
                 let tempers = []
-                dog.temperaments === 'object' ? tempers = dog.temperaments?.forEach(e=>e.name?.split(', ')) : 
+
+                typeof dog.temperaments === 'object' ? 
+                tempers = dog.temperaments?.forEach(e=>e.name?.split(', ')) : 
                 tempers = dog.temperament?.split(', ')
 
                 if(tempers){
@@ -35,49 +61,92 @@ const RootReducer = (state=initialState,action) => {
                         return tempers[i] === action.payload
                     };
                 } 
+
                 return false
+
             })
+
             return{
+
                 ...state,
                 dogs: temperFiltered
+
             }
         
         case FILTER_BY_ORIGIN: 
-            let dogsByOrigin = state.allDogs
-            switch(action.payload){
-                case "all": dogsByOrigin = state.allDogs;break
-                case "api": dogsByOrigin = state.allDogs.filter(e=>e.id < 300);break
-                case "created": dogsByOrigin = state.allDogs.filter(e=>e.id.length > 3);break
-                default: dogsByOrigin = state.dogs
-            }           
+
+            let dogsByOrigin= action.payload === "created" ? state.allDogs.filter(e=>e.createdInDB) : state.allDogs.filter(e=>!e.createdInDB) 
+
+            // switch(action.payload){
+
+            //     case "all": 
+            //         break
+
+            //     case "api": 
+            //         dogsByOrigin = state.dogs.filter(e=>e.id < 300)
+            //         break
+
+            //     case "created": 
+            //         dogsByOrigin = state.dogs.filter(e=>e.id.length > 3)
+            //         break
+
+            //     default: break
+            // }    
+
             return{
+
                 ...state,
-                dogs: dogsByOrigin
+                dogs: action.payload === "all" ? state.allDogs : dogsByOrigin
+
             }
 
         case ASC_OR_DESC:
+
             return { 
+
                 ...state, 
                 ascOrDesc: action.payload 
+
+            }
+
+        case GET_DETAIL: 
+            return{
+                ...state,
+                detail: action.payload
             }
 
         case ORDER:
             let orderedDogs = state.allDogs
-            let order = state.ascOrDesc
             switch(action.payload){
+
                 case "alf": 
-                    if (order === "asc") {
-                        orderedDogs.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
-                    } else if(order === "desc") {
-                        orderedDogs.sort((a,b) => (a.name < b.name) ? 1 : ((b.name < a.name) ? -1 : 0))
+                    if (state.ascOrDesc === "asc") {
+
+                        orderedDogs = state.dogs.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+
+                    } else  {
+
+                        orderedDogs = state.dogs.sort((a,b) => (a.name < b.name) ? 1 : ((b.name < a.name) ? -1 : 0))
+
                     }
                     break;
+
                 case "peso": 
+
                     if(state.ascOrDesc === "asc"){
-                        orderedDogs.sort((a,b) => a.weight - b.weight)
-                    } else orderedDogs.sort((a,b) => b.weight - a.weight)
+                        orderedDogs = state.dogs.sort((a,b) => {
+
+                            return parseInt(a.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10) - parseInt(b.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10)
+
+                        })
+                    } else orderedDogs = state.dogs.sort((a,b) => {
+
+                        return parseInt(b.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10) - parseInt(a.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10)
+
+                    })
                     console.log(action.payload,orderedDogs)
                     break;
+
                 default: break
             }
             return {

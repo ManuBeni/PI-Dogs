@@ -62,8 +62,14 @@ router.post('/', async (req, res, next) => {
 //     res.send('soy put /temperament')
 // })
 
-// router.delete('/', (req, res, next) => {
-//     res.send('soy delete /temperament')
-// })
+router.delete('/', async (req, res, next) => {
+    let nameToDelete = req.body.name
+
+    await Temperament.destroy({
+       where: { name: nameToDelete }
+    })
+
+    res.send(nameToDelete + " deleted from db")
+})
 
 module.exports = router;

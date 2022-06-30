@@ -7,6 +7,7 @@ import {
 import LandingPage from './components/LandingPage';
 import Home from './components/Home';
 import Detail from './components/Detail';
+import DogCreate from "./components/DogCreate"
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
         <Routes>
           <Route path="/" element = {<LandingPage/>}/>
           <Route path="/home" element={<Home/>}/>
-          <Route path="/detail" element={<Detail/>}/>
+          <Route path="/dog" element={<DogCreate/>}/>
+          <Route path="/detail/:id" element={<Detail/>}/>
         </Routes>
     </div>
     </Router>
