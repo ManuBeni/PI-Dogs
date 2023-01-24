@@ -13,7 +13,7 @@ export default function Home(){
     const tempers = useSelector((state)=>state.RootReducer.tempers)
     const [currentPage, setCurrentPage] = useState(1)
     const [dogsPerPage] = useState(8)
-    const [orders, setOrder] = useState("")
+    const [orders, setOrder] = useState("asc")
     const [typeOfOrder, setTypeOfOrder] = useState("alf")
     const indexOFLastDog = currentPage * dogsPerPage
     const indexOfFristDog = indexOFLastDog - dogsPerPage
@@ -37,11 +37,8 @@ export default function Home(){
     }
 
     function handleOrderWay(e){
-        
-        e.preventDefault()
+        setOrder(e.target.value)
         dispatch(ascOrDesc(e.target.value))
-        setCurrentPage(1)
-        setOrder(`order: ${e.target.value}` )
         
     }
 
@@ -91,7 +88,7 @@ export default function Home(){
             <div>
 
                 <select onChange={e=>handleFilterByTemper(e)}>
-                    <option value="All">Todos</option>
+                    <option value="All">All</option>
                     {noDuplicatesSortedTempers.map((temper,i)=>{
                         return (
                             <option value = {temper} key={i}>{temper}</option>
@@ -100,19 +97,19 @@ export default function Home(){
                 </select>
 
                 <select onChange={e=>handleOrder(e)}>
-                    <option value = 'alf'>Orden Alfabético</option>
-                    <option value = 'peso'>Peso</option>
+                    <option value = 'alf'>Alphabetical Order</option>
+                    <option value = 'peso'>Weight</option>
                 </select>
 
                 <select onChange={e=>handleOrderWay(e)}>
-                    <option value='asc'>Ascendiente</option>
-                    <option value='desc'>Descendiente</option>
+                    <option value='asc'>A-Z</option>
+                    <option value='desc'>Z-A</option>
                 </select>
 
                 <select onChange={e=>handleFilterByOrigin(e)}>
-                    <option value='all'>Todos</option>
-                    <option value='api'>Existente</option>
-                    <option value='created'>Creado</option>
+                    <option value='all'>All</option>
+                    <option value='api'>Existing</option>
+                    <option value='created'>Created</option>
                 </select>   
 
             </div>

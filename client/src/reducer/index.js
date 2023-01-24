@@ -5,7 +5,8 @@ const initialState = {
     allDogs:[],
     tempers:[],
     detail:[],
-    ascOrDesc:"asc"
+    ascOrDesc:"asc",
+    alphOrWeight: "alph"
 }
 
 const RootReducer = (state=initialState,action) => {
@@ -102,9 +103,45 @@ const RootReducer = (state=initialState,action) => {
 
         case ASC_OR_DESC:
 
+        let alphOrderedDogs = state.dogs
+
+        if(state.alphOrWeight === "weight"){
+
+            if(action.payload === "asc"){
+                alphOrderedDogs = state.dogs.sort((a,b) => {
+
+                    return parseInt(a.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10) - parseInt(b.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10)
+
+                })
+            } 
+            if(action.payload === "desc"){ alphOrderedDogs = state.dogs.sort((a,b) => {
+
+                return parseInt(b.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10) - parseInt(a.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10)
+            
+            })
+            }
+
+        } 
+        
+        if(state.alphOrWeight === 'alph'){
+
+        if (action.payload === "asc") {
+
+            alphOrderedDogs = state.dogs.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+
+        } 
+        if(action.payload === "desc") {
+
+            alphOrderedDogs = state.dogs.sort((a,b) => (a.name < b.name) ? 1 : ((b.name < a.name) ? -1 : 0))
+
+        }
+
+        }
+
             return { 
 
                 ...state, 
+                dogs: alphOrderedDogs,
                 ascOrDesc: action.payload 
 
             }
@@ -116,10 +153,14 @@ const RootReducer = (state=initialState,action) => {
             }
 
         case ORDER:
-            let orderedDogs = state.allDogs
+            let orderedDogs = state.dogs
+            let AOrW = "alph"
             switch(action.payload){
 
-                case "alf": 
+                case "alf":  
+
+                AOrW = "alph"
+
                     if (state.ascOrDesc === "asc") {
 
                         orderedDogs = state.dogs.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
@@ -133,6 +174,8 @@ const RootReducer = (state=initialState,action) => {
 
                 case "peso": 
 
+                    AOrW = "weight"
+
                     if(state.ascOrDesc === "asc"){
                         orderedDogs = state.dogs.sort((a,b) => {
 
@@ -144,13 +187,14 @@ const RootReducer = (state=initialState,action) => {
                         return parseInt(b.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10) - parseInt(a.weight?.match(/\d+ - \d+/gi)?.pop().replace(/\D/gi,""),10)
 
                     })
-                    console.log(action.payload,orderedDogs)
+                    
                     break;
 
                 default: break
             }
             return {
                 ...state,
+                alphOrWeight: AOrW,
                 dogs: orderedDogs
             }
         default: return {...state}

@@ -4,9 +4,10 @@ import RootReducer from "../reducer";
 
 const store = configureStore({
     reducer: {
-        RootReducer
+        RootReducer,
     },
-    middleware: [thunk]
+    middleware: [thunk],
+    devTools:true
 })
 
 export default store
