@@ -9,6 +9,7 @@ const { API_KEY } = process.env;
 
 const getApiData = async () => {
     
+    try{
     const apiURL = await axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`)
 
     const apiData = await apiURL
@@ -35,7 +36,7 @@ const getApiData = async () => {
     })
   
     return apiData;
-
+    } catch(e){next(e)}
 }
   
 const getDBData = async () => {
@@ -73,6 +74,7 @@ router.get('/', async (req, res, next) => {
     
         // If a 'name' query exists in the url, we get all occurrences (in api or DB).
         if(queryName){
+            try{
             let dogas = allData.filter(el=>el.name.toLowerCase() == queryName)
             console.log(dogas)
             let dogName = allData.filter(el=>{
@@ -83,7 +85,7 @@ router.get('/', async (req, res, next) => {
             dogName.length ?
             res.status(200).send(dogName) : 
             res.status(404).send('There is no dog with that name :(')
-            
+        } catch(e){next(e)}
         } else {
 
         // Else, we send all data on api and DB dogs.

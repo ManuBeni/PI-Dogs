@@ -10,7 +10,7 @@ const {
 router.get('/', async (req, res, next) => {
     
     // Getting all the api's data
-    const allDataFromApi = await axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`)
+    const allDataFromApi = await axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`).catch((e)=>{console.log(e)})
     
     // Mapping for temperaments
     const tempers = allDataFromApi.data.map(e => e.temperament)

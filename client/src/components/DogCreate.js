@@ -60,27 +60,27 @@ export default function DogCreate(){
 
     return(
         <div className="creationDog">  
-            <Link to="/home">Volver</Link>
-            <h1>Creación de personaje</h1>
+            <Link to="/home">Go Back Home</Link>
+            <h1>Create a new dog!</h1>
             <form onSubmit={(e)=>handleSubmit(e)}>
               
                 <div>
-                    <label>Nombre: </label>
+                    <label>Name: </label>
                     <input type="text" value={input.name} name="name" onChange={handleChange}/>
                 </div>
 
                 <div>
-                    <label>Altura: </label>
+                    <label>Height: </label>
                     <input type="text" value={input.height} name="height" onChange={handleChange}/>
                 </div>
 
                 <div>
-                    <label>Peso: </label>
+                    <label>Weight: </label>
                     <input type="text" value={input.weight} name="weight" onChange={handleChange}/>
                 </div>
 
                 <div>
-                    <label>Años de vida: </label>
+                    <label>Life Span: </label>
                     <input type="text" value={input.life_span} name="life_span" onChange={handleChange}/>
                 </div>
           
@@ -96,7 +96,7 @@ export default function DogCreate(){
                     </select>
                </div>
 
-               <button type="submit">Crear perro</button>
+               <button type="submit">Create Dog</button>
             </form>
            
             {input.temperament.map(el=>

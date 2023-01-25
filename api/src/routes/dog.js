@@ -55,11 +55,13 @@ router.post('/', async (req, res, next) => {
  router.delete('/', async (req, res, next) => {
      let nameToDelete = req.body.name
 
+     try{
      await Dog.destroy({
         where: { name: nameToDelete }
      })
 
      res.send(nameToDelete + " deleted from db")
+    } catch(e){next(e)}
  })
 
 module.exports = router;

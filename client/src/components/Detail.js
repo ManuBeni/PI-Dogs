@@ -21,7 +21,7 @@ export default function Detail(props){
         <div className='detail'>
             {dog?.length > 0 ? 
                 <div>
-                    <img src={dog[0].image} alt="not found" width='200px' height='200px'></img>
+                    <img src={dog[0].image ? dog[0].image : "https://www.clipartmax.com/png/full/3-39170_paw-print-dog-paw-vector-graphic-dog-paw-print-vector.png"} alt="not found" width='200px' height='200px'></img>
                     <h3>{dog[0].name}</h3>
                     <h5>Weight: {dog[0].weight}</h5>
                     <h5>Height: {dog[0].height}</h5>
